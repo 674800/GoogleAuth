@@ -1,0 +1,16 @@
+public String run(String imei, String iccid) {
+
+		GoogleAuthenticatorConfig config = new GoogleAuthenticatorConfig.GoogleAuthenticatorConfigBuilder()
+				.setHmacHashFunction(HmacHashFunction.HmacSHA256).setKeyRepresentation(KeyRepresentation.BASE64)
+				.build();
+
+		GoogleAuthenticator gAuth = new GoogleAuthenticator(config, new ReseedingSecureRandom("SHA1PRNG"));
+
+		int imei = gAuth.getTotpPassword(imei.toUpperCase());
+		int icci = gAuth.getTotpPassword((imei + iccid).toUpperCase());
+		String qr = imei+icci;
+		return new BigInteger(qr).toString(36);
+	}
+	
+	后端给前端的代码，由于Android编译不过，所以修改，主要是Base64导致
+	
